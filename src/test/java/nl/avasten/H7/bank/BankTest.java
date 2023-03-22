@@ -38,11 +38,15 @@ class BankTest {
     @Test
     void givenABankDepositMoneyCheckNewBalance() {
         bank1.deposit(new BigDecimal("78899"));
-        assertTrue(Objects.equals(bank1.getBalance(), new BigDecimal("78899")));
+        assertEquals(bank1.getBalance(), new BigDecimal("78899"));
+
+        bank1.withdrawal(new BigDecimal("1223"));
+        assertEquals(bank1.getBalance(), new BigDecimal("77676"));
     }
 
     @Test
     void withdrawal() {
+        bank1.withdrawal(new BigDecimal("230"));
     }
 
     @Test
