@@ -1,4 +1,4 @@
-package org.example.energieRekening;
+package nl.avasten._INPROJAV.energieRekening;
 
 import org.junit.jupiter.api.Test;
 

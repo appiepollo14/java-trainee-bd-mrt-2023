@@ -1,4 +1,4 @@
-package org.example.multiplications;
+package nl.avasten._INPROJAV.multiplications;
 
 import org.junit.jupiter.api.Test;
 

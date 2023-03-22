@@ -1,4 +1,4 @@
-package org.example.strings;
+package nl.avasten._INPROJAV.strings;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

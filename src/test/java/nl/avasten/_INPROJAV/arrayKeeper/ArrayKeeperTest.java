@@ -1,4 +1,4 @@
-package org.example.arrayKeeper;
+package nl.avasten._INPROJAV.arrayKeeper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

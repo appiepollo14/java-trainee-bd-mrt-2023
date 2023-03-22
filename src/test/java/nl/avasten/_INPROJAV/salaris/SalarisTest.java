@@ -1,4 +1,4 @@
-package org.example.salaris;
+package nl.avasten._INPROJAV.salaris;
 
 import org.junit.jupiter.api.Test;
 
