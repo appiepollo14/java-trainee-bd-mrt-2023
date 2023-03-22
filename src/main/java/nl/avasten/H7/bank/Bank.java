@@ -4,15 +4,16 @@ import java.math.BigDecimal;
 
 public class Bank {
 
-    public static BigDecimal totalInBank = new BigDecimal("0");
+    public static BigDecimal totalInBank = new BigDecimal("0.00");
 
     private float interestRate;
     private int accountNumber;
     private BigDecimal balance;
 
     public Bank() {
-        this.interestRate = 5f;
-        this.balance = new BigDecimal("0");
+        this.interestRate = 5.3f;
+        System.out.println(this.interestRate);
+        this.balance = new BigDecimal("0.00");
     }
 
     public Bank(BigDecimal balance) {

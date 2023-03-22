@@ -19,11 +19,7 @@ public class  AsjerArrays {
     }
 
     public static void copy_array_and_doubleLength() {
-        long[] original = new long[4];
-        original[0] = 1;
-        original[1] = 2;
-        original[2] = 3;
-        original[3] = 4;
+        long[] original = { 1, 2, 3, 4};
 
         int i = original.length * 2;
 
@@ -43,11 +39,11 @@ public class  AsjerArrays {
 
     public static void sumOfArrayFilledFromConsole() {
 
-        long[] inputArray = new long[10];
+        int[] inputArray = new int[10];
         int sum = 0;
         Scanner scanner = new Scanner(System.in);
 
-        for (int i = 0; i < inputArray.length; i++) {
+        for (int i : inputArray) {
 
             int input = 0;
 

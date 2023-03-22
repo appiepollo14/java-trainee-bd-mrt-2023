@@ -2,15 +2,30 @@ package nl.avasten.H5.fibonacci;
 
 public class Fibo {
 
-    public void run(int i) {
+    public long run(int start, int n) {
 
-        int fiboSum = 0;
-        int last = 1;
-
-        for (int n = 1; n <= i; n++) {
-            int sum = (last * n-1) + (last * n-2);
-            System.out.println(sum);
-            last++;
+        if (n <= 0) {
+            throw new IllegalArgumentException("Mag niet gelijk of kleiner aan 0 zijn!");
         }
+
+        int lastLastGetal = 0;
+        int lastGetal = 1;
+
+        if (n == 1) {
+            return lastLastGetal;
+        } else if (n == 2) {
+            return lastGetal;
+        } else {
+            for (int y = 2; y < n; y++) {
+                int currentSum = lastGetal + lastLastGetal;
+                lastLastGetal = lastGetal;
+                lastGetal = currentSum;
+            }
+            return lastGetal;
+        }
+    }
+
+    public long run(int i) {
+        return this.run(0, i);
     }
 }
