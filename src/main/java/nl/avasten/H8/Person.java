@@ -1,4 +1,7 @@
-package nl.avasten.H7.person;
+package nl.avasten.H8;
+
+import nl.avasten.H7.person.Gender;
+import nl.avasten.H7.person.PersonDiedException;
 
 public class Person {
 
@@ -24,31 +27,16 @@ public class Person {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
     public void haveBirthday() throws PersonDiedException {
         if (this.age + 1 > maxAge) {
             throw new PersonDiedException("Persoon is overleden");
         }
         this.age += 1;
+    }
+
+    @Override
+    public String toString() {
+        return  new String();
     }
 }
 

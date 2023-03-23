@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  myapp:
+    image: eclipse-temurin:17.0.6_10-jre-jammy
+    container_name: jar-test
+    volumes:
+      - ./JarExample.jar:/opt/app/JarExample.jar
+    command: java -jar /opt/app/JarExample.jar
+    restart: always

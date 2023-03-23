@@ -6,9 +6,8 @@ public class Bank {
 
     public static BigDecimal totalInBank = new BigDecimal("0.00");
 
-    private float interestRate;
-    private int accountNumber;
-    private BigDecimal balance;
+
+
 
     public Bank() {
         this.interestRate = 5.3f;
@@ -48,22 +47,6 @@ public class Bank {
             return;
         }
         this.deposit(amount);
-    }
-
-    public float getInterestRate() {
-        return interestRate;
-    }
-
-    public void setInterestRate(float interestRate) {
-        this.interestRate = interestRate;
-    }
-
-    public int getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(int accountNumber) {
-        this.accountNumber = accountNumber;
     }
 
     public BigDecimal getBalance() {
