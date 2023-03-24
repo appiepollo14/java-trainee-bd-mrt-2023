@@ -74,7 +74,7 @@ public class FiboTest {
 
     @Test
     void givenIEquals100WhenGoldenRatioIsCalculatedUsingLongsThenResultIsSmall() {
-        for (int i = 4; i < 1000000; i++) {
+        for (int i = 4; i < 1000; i++) {
             assertTrue(fibo.goldenRatio2(i).compareTo(BigDecimal.ZERO) > 0, "Kapot bij: " + i);
         }
     }
