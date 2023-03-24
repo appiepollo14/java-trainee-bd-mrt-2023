@@ -1,60 +1,92 @@
 package nl.avasten.H7.bank;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 public class Bank {
 
-    public static BigDecimal totalInBank = new BigDecimal("0.00");
+    public BigDecimal totalInBank = new BigDecimal("0.00");
+    public ArrayList<BankAccount> bankAccountsList = new ArrayList<>();
 
-
-
-
-    public Bank() {
-        this.interestRate = 5.3f;
-        System.out.println(this.interestRate);
-        this.balance = new BigDecimal("0.00");
+    public void createBankAccount() {
+        this.bankAccountsList.add(new BankAccount());
     }
 
-    public Bank(BigDecimal balance) {
-        this();
-        this.balance = new BigDecimal(String.valueOf(balance));
+    public void createBankAccount(int accountNumber) {
+        this.bankAccountsList.add(new BankAccount(accountNumber));
     }
 
-    public Bank(BigDecimal balance, int accountNumber) {
-        this();
-        this.balance = new BigDecimal(String.valueOf(balance));
-        this.accountNumber = accountNumber;
-    }
-
-    public void deposit(BigDecimal amount) {
-        this.balance = this.balance.add(amount);
-    }
-
-    public void withdrawal(BigDecimal amount) {
-        BigDecimal newBalance = this.getBalance().subtract(amount);
-        if (newBalance.compareTo(BigDecimal.ZERO) > 0) {
-            this.setBalance(newBalance);
-        } else {
-            throw new IllegalArgumentException("Saldo is ontoereikend voor opname!");
+    public void listBankAccounts() {
+        for (BankAccount i: bankAccountsList) {
+            System.out.println(i.toString());
         }
     }
 
-    public void transferMoney(Bank fromBank, BigDecimal amount) {
+    public BankAccount findBankAccount(int accountNum) throws IllegalArgumentException {
+        return bankAccountsList.stream()
+                .filter(e -> accountNum == e.getAccountNumber())
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Fout banknummer"));
+    }
+
+    public void transferMoney(int fromAccount, int toAccount, BigDecimal amount) {
+        BankAccount fromBank;
+        BankAccount toBank;
+
         try {
-            fromBank.withdrawal(amount);
-        } catch (NumberFormatException e) {
+            fromBank = findBankAccount(fromAccount);
+            toBank = findBankAccount(toAccount);
+        } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return;
         }
-        this.deposit(amount);
+
+        //TODO Ask whether this can be shorted
+        try {
+            fromBank.withdrawal(amount);
+            toBank.deposit(amount);
+        } catch (NumberFormatException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    public BigDecimal getBalance() {
-        return balance;
+    public void withdrawal(int accountNumber, BigDecimal amount) throws IllegalArgumentException, NumberFormatException {
+        BankAccount fromBank;
+
+        try {
+            fromBank = findBankAccount(accountNumber);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+        //TODO Ask whether this can be shorted
+        try {
+            fromBank.withdrawal(amount);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException(e.getMessage());
+        }
+        this.totalInBank = this.totalInBank.subtract(amount);
     }
 
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
+    public void deposit(int accountNumber, BigDecimal amount) throws IllegalArgumentException, NumberFormatException {
+        BankAccount toBank;
+
+        try {
+            toBank = findBankAccount(accountNumber);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+        try {
+            toBank.deposit(amount);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException(e.getMessage());
+        }
+        this.totalInBank = this.totalInBank.add(amount);
+    }
+
+    public BigDecimal getTotalInBank() {
+        return this.totalInBank;
     }
 
 }

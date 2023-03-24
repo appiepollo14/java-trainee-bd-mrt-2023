@@ -4,52 +4,82 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BankTest {
 
-    private Bank bank1;
-    private Bank bank2;
-    private Bank bank3;
-    private Bank bank4;
-    private Bank bank5;
-    private Bank bank6;
-    private Bank bank7;
-    private Bank bank8;
-    private Bank bank9;
-    private Bank bank10;
+    private Bank target;
 
     @BeforeEach
     public void init() {
-        this.bank1 = new Bank(new BigDecimal(0), 34312);
-        this.bank2 = new Bank(new BigDecimal(0), 32192);
-        this.bank3 = new Bank(new BigDecimal(0), 55320);
-        this.bank4 = new Bank(new BigDecimal(0), 23198);
-        this.bank5 = new Bank(new BigDecimal(0), 99341);
-        this.bank6 = new Bank(new BigDecimal(0), 56213);
-        this.bank7 = new Bank(new BigDecimal(0), 66234);
-        this.bank8 = new Bank(new BigDecimal(0), 12345);
-        this.bank9 = new Bank(new BigDecimal(0), 84245);
-        this.bank10 = new Bank(new BigDecimal(0), 23667);
+        int[] accountsList = {20309, 10124, 88292, 33088, 42605, 23133, 58923, 99231, 12234, 91821};
+        BigDecimal[] moneyArray = {
+                new BigDecimal("230.12"),
+                new BigDecimal("123.50"),
+                new BigDecimal("9923.99"),
+                new BigDecimal("120.24"),
+                new BigDecimal("7782.12"),
+                new BigDecimal("112.78"),
+                new BigDecimal("230.12"),
+                new BigDecimal("823"),
+                new BigDecimal("23"),
+                new BigDecimal("20.00")
+        };
+        target = new Bank();
+        for (int i = 0; i < 10; i++) {
+            target.createBankAccount(accountsList[i]);
+            target.bankAccountsList.get(i).deposit(moneyArray[i]);
+        }
     }
 
     @Test
-    void givenABankDepositMoneyCheckNewBalance() {
-        bank1.deposit(new BigDecimal("78899"));
-        assertEquals(bank1.getBalance(), new BigDecimal("78899"));
-
-        bank1.withdrawal(new BigDecimal("1223"));
-        assertEquals(bank1.getBalance(), new BigDecimal("77676"));
-    }
-
-    @Test
-    void withdrawal() {
-        bank1.withdrawal(new BigDecimal("230"));
+    public void givenABankAccountThatDoesntExistWhenAddingMoneyThenError() {
+        assertThrows(IllegalArgumentException.class,
+                () -> target.withdrawal(12211, new BigDecimal(100.00)));
     }
 
     @Test
     void transferMoney() {
+        BigDecimal expectedBalanceToBank = new BigDecimal("100.00");
+        BankAccount toBank = target.findBankAccount(20309);
+        target.deposit(20309, new BigDecimal("100.00"));
+
+        assertEquals(target.totalInBank, expectedBalanceToBank);
+        assertEquals(expectedBalanceToBank, toBank.getBalance());
+    }
+
+    @Test
+    void listBankAccounts() {
+        target.listBankAccounts();
+    }
+
+    @Test
+    void testWithdrawal() {
+        BigDecimal expectedBalanceToBank = new BigDecimal("100.00");
+        BankAccount toBank = target.findBankAccount(20309);
+        target.deposit(20309, new BigDecimal("400.00"));
+        target.withdrawal(20309, new BigDecimal("300.00"));
+
+        assertEquals(target.totalInBank, expectedBalanceToBank);
+        assertEquals(expectedBalanceToBank, toBank.getBalance());
+
+    }
+
+    @Test
+    void givenABankAccountWhenWithdrawingMoreThanBalanceThenError() {
+        target.deposit(20309, new BigDecimal("400.00"));
+        assertThrows(IllegalArgumentException.class, () ->
+                target.withdrawal(20309, new BigDecimal("700.00")));
+    }
+
+    @Test
+    void givenABankAccountWhenCalculatingInterestThenResultEquals() {
+        BankAccount bank = target.findBankAccount(20309);
+        target.deposit(20309, new BigDecimal("400.00"));
+        BigDecimal calculatedInterest = bank.calculateInterest();
+        BigDecimal expectedInterest = new BigDecimal("21.20");
+
+        assertEquals(expectedInterest, calculatedInterest);
     }
 }
