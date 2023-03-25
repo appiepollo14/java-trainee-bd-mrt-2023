@@ -3,6 +3,8 @@ package nl.avasten.H8;
 import nl.avasten.H7.person.Gender;
 import nl.avasten.H7.person.PersonDiedException;
 
+import java.util.Objects;
+
 public class Person {
 
     public static final String universalRights = "All humans are created equal.";
@@ -11,7 +13,7 @@ public class Person {
     private String name;
     private int age;
     private Gender gender;
-    
+
 
     public Person() {
         this.gender = Gender.UNKNOWN;
@@ -23,8 +25,22 @@ public class Person {
         this.age = age;
     }
 
+    public Person(String name, int age, Gender gender) {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public int getAge() {
+        return this.age;
+    }
+
+    public Gender getGender() {
+        return this.gender;
     }
 
     public void haveBirthday() throws PersonDiedException {
@@ -37,11 +53,40 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                ", gender=" + gender +
-                '}';
+        return name + " (" +
+                age + ") is " +
+                gender.toString();
     }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode() * gender.toString().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (o instanceof Person p) {
+            return Objects.equals(p.getName(), this.getName()) &&
+                    Objects.equals(p.getAge(), this.getAge()) &&
+                    Objects.equals(p.getGender().toString(), this.getGender().toString());
+        } else {
+            return false;
+        }
+    }
+
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Person person = (Person) o;
+//        return age == person.age && Objects.equals(name, person.name) && gender == person.gender;
+//    }
 }
 
