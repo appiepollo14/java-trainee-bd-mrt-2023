@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BankTest {
 
@@ -34,6 +35,12 @@ class BankTest {
     }
 
     @Test
+    public void givenAListOfBankAccountsWhenCalculatingTotalInBankThanCheckResult() {
+        BigDecimal expected = new BigDecimal("19388.87");
+        assertEquals(expected, target.getTotalInBankWithStream());
+    }
+
+    @Test
     public void givenABankAccountThatDoesntExistWhenAddingMoneyThenError() {
         assertThrows(IllegalArgumentException.class,
                 () -> target.withdrawal(12211, new BigDecimal(100.00)));
@@ -41,11 +48,12 @@ class BankTest {
 
     @Test
     void transferMoney() {
-        BigDecimal expectedBalanceToBank = new BigDecimal("100.00");
+        BigDecimal expectedTotalInBank = new BigDecimal("19488.87");
+        BigDecimal expectedBalanceToBank = new BigDecimal("330.12");
         BankAccount toBank = target.findBankAccount(20309);
         target.deposit(20309, new BigDecimal("100.00"));
 
-        assertEquals(target.totalInBank, expectedBalanceToBank);
+        assertEquals(expectedTotalInBank, target.getTotalInBankWithStream());
         assertEquals(expectedBalanceToBank, toBank.getBalance());
     }
 
@@ -56,7 +64,7 @@ class BankTest {
 
     @Test
     void testWithdrawal() {
-        BigDecimal expectedBalanceToBank = new BigDecimal("100.00");
+        BigDecimal expectedBalanceToBank = new BigDecimal("330.12");
         BankAccount toBank = target.findBankAccount(20309);
         target.deposit(20309, new BigDecimal("400.00"));
         target.withdrawal(20309, new BigDecimal("300.00"));

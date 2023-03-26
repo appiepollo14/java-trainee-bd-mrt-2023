@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 public class Bank {
 
-    public BigDecimal totalInBank = new BigDecimal("0.00");
     public ArrayList<BankAccount> bankAccountsList = new ArrayList<>();
 
     public void createBankAccount() {
@@ -17,7 +16,7 @@ public class Bank {
     }
 
     public void listBankAccounts() {
-        for (BankAccount i: bankAccountsList) {
+        for (BankAccount i : bankAccountsList) {
             System.out.println(i.toString());
         }
     }
@@ -65,7 +64,6 @@ public class Bank {
         } catch (NumberFormatException e) {
             throw new NumberFormatException(e.getMessage());
         }
-        this.totalInBank = this.totalInBank.subtract(amount);
     }
 
     public void deposit(int accountNumber, BigDecimal amount) throws IllegalArgumentException, NumberFormatException {
@@ -82,11 +80,13 @@ public class Bank {
         } catch (NumberFormatException e) {
             throw new NumberFormatException(e.getMessage());
         }
-        this.totalInBank = this.totalInBank.add(amount);
     }
 
-    public BigDecimal getTotalInBank() {
-        return this.totalInBank;
+    public BigDecimal getTotalInBankWithStream() {
+        return this.bankAccountsList
+                .stream()
+                .map(BankAccount::getBalance)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 }
