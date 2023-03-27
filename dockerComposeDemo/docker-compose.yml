@@ -11,19 +11,23 @@ services: # Elke service is een docker container, met een eigen doel
     restart: unless-stopped
     networks:
       - backdb
+
   backend:
+    # Java 20 image
     image: amazoncorretto:20
     container_name: backend
-    ports: # Poort binnen naar buiten
-      - "8081:8081"
+    # Kopieren bestanden van lokaal naar container
     volumes:
       - ./backend.jar:/opt/app/backend.jar
+    # Opstarten backend, met profiel
     command: java "-Dspring.profiles.active=prod-postgres" -jar /opt/app/backend.jar
+    # Dependencies tussen containers. Helpt met de volgorde van opstarten van containers.
     depends_on:
       - database
     networks:
       - frontback
       - backdb
+
   frontend:
     image: nginx:latest
     container_name: vue_frontend
@@ -38,6 +42,8 @@ services: # Elke service is een docker container, met een eigen doel
     networks:
       - frontback
 
+# Opstellen netwerken, zonder netwerken kunnen de containers niet met elkaar praten
+# Bridge is de standaard driver om met elkaar te praten.
 networks:
   backdb:
     driver: bridge
