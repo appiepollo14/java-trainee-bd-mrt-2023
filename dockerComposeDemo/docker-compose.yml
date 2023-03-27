@@ -1,0 +1,45 @@
+version: '3.7' # Versie van de docker compose syntax
+
+services: # Elke service is een docker container, met een eigen doel
+  database:
+    image: 'postgres:latest'
+    container_name: postgres-db
+    env_file: # Variabelen in file
+      test.env
+    volumes: # Lokaal data opslaan anders kwijt na herstart
+      - ./db-data/:/var/lib/postgresql/data/
+    restart: unless-stopped
+    networks:
+      - backdb
+  backend:
+    image: amazoncorretto:20
+    container_name: backend
+    ports: # Poort binnen naar buiten
+      - "8081:8081"
+    volumes:
+      - ./backend.jar:/opt/app/backend.jar
+    command: java "-Dspring.profiles.active=prod-postgres" -jar /opt/app/backend.jar
+    depends_on:
+      - database
+    networks:
+      - frontback
+      - backdb
+  frontend:
+    image: nginx:latest
+    container_name: vue_frontend
+    ports: # Poort binnen naar buiten
+      - "5001:5001"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./frontend:/usr/share/nginx/html
+    restart: always
+    depends_on:
+      - backend
+    networks:
+      - frontback
+
+networks:
+  backdb:
+    driver: bridge
+  frontback:
+    driver: bridge

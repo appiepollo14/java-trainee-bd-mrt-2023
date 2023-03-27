@@ -43,7 +43,7 @@ class BankTest {
     @Test
     public void givenABankAccountThatDoesntExistWhenAddingMoneyThenError() {
         assertThrows(IllegalArgumentException.class,
-                () -> target.withdrawal(12211, new BigDecimal(100.00)));
+                () -> target.withdrawal(12211, new BigDecimal("100.00")));
     }
 
     @Test
@@ -69,7 +69,7 @@ class BankTest {
         target.deposit(20309, new BigDecimal("400.00"));
         target.withdrawal(20309, new BigDecimal("300.00"));
 
-        assertEquals(target.totalInBank, expectedBalanceToBank);
+        assertEquals(expectedBalanceToBank, target.getTotalInBankWithStream());
         assertEquals(expectedBalanceToBank, toBank.getBalance());
 
     }

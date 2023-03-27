@@ -1,0 +1,1 @@
+import{n as t}from"./index-4791bb42.js";const a={};var l=function(){var e=this;return e._self._c,e._m(0)},r=[function(){var n=this,e=n._self._c;return e("div",{staticClass:"Admin mail template"},[e("h1",[n._v("Hier komt de mail template page")])])}],_=t(a,l,r,!1,null,null,null,null);const i=_.exports;export{i as default};

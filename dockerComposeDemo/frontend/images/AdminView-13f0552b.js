@@ -1,0 +1,1 @@
+import{n as r}from"./index-4791bb42.js";const t={};var _=function(){var n=this;return n._self._c,n._m(0)},s=[function(){var e=this,n=e._self._c;return n("div",{staticClass:"Admin"},[n("h1",[e._v("Hier komt de admin page")])])}],a=r(t,_,s,!1,null,null,null,null);const l=a.exports;export{l as default};
