@@ -1,49 +1,66 @@
 package nl.avasten.H7.webshop;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 
-import static java.math.BigDecimal.ZERO;
-import static java.time.LocalTime.now;
+public record Order(
+    UUID id, Customer customer, LocalTime orderDate, BigDecimal totalOrder, ArrayList<Item> items)
+    implements Iterable<Item> {
 
-public class Order implements Iterable<Item> {
+  public Order(Customer customer, ArrayList<Item> items) {
+    this(UUID.randomUUID(), customer, LocalTime.now(), calculateTotalOrder(items), items);
+  }
 
-    private Customer customer;
-    private LocalTime orderDate;
-    // TODO uitzoeken hoe dat gaat met formaat achter de komma
-    private BigDecimal totalOrder = ZERO;
-    private ArrayList<Item> items;
+  private static BigDecimal calculateTotalOrder(ArrayList<Item> items) {
+    return items.stream().map(Item::getItemPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+  }
 
-    public Order(Customer customer, BigDecimal totalOrder, ArrayList<Item> items) {
-        this.customer = customer;
-        this.orderDate = now();
+  public UUID getId() {
+    return this.id;
+  }
 
-        for (Item i : items) {
-            this.totalOrder = this.totalOrder.add(i.itemPrice());
-        };
+  @Override
+  public String toString() {
+    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+    currencyFormat.setCurrency(Currency.getInstance(Locale.getDefault()));
+    StringBuilder builder = new StringBuilder();
+    builder.append("Order: ").append(id).append("\n");
+    builder.append("Datum: ").append(orderDate).append("\n");
+    builder.append("Klant: ").append(customer).append("\n");
+    builder.append("Totale prijs: ").append(currencyFormat.format(totalOrder)).append("\n");
+    builder.append(String.format("%-40s%-20s%-20s\n", "Id", "Prijs", "Omschrijving"));
+    builder.append(
+        "-----------------------------------------------------------------------------------\n");
+
+    for (Item item : items) {
+      builder.append(item.toString());
+      builder.append("\n");
     }
 
-    // Anonimous class
-    @Override
-    public Iterator<Item> iterator() {
-        return new Iterator<Item>() {
+    return builder.toString();
+  }
 
-            private int i = 0;
+  // Anonimous class
+  @Override
+  public Iterator<Item> iterator() {
+    return new Iterator<Item>() {
 
-            @Override
-            public boolean hasNext() {
-                if ( i < Order.this.items.size()) {
-                    return true;
-                }
-                return false;
-            }
+      private int i = 0;
 
-            @Override
-            public Item next() {
-                return Order.this.items.get(i);
-            }
-        };
-    }
+      @Override
+      public boolean hasNext() {
+        if (i < Order.this.items.size()) {
+          return true;
+        }
+        return false;
+      }
+
+      @Override
+      public Item next() {
+        return Order.this.items.get(i);
+      }
+    };
+  }
 }

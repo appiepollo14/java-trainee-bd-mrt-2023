@@ -12,6 +12,8 @@ class BankTest {
 
     private Bank target;
 
+//    private Bank.BankAccount bank = new Bank.BankAccount();
+
     @BeforeEach
     public void init() {
         int[] accountsList = {20309, 10124, 88292, 33088, 42605, 23133, 58923, 99231, 12234, 91821};
@@ -30,7 +32,7 @@ class BankTest {
         target = new Bank();
         for (int i = 0; i < 10; i++) {
             target.createBankAccount(accountsList[i]);
-            target.bankAccountsList.get(i).deposit(moneyArray[i]);
+            target.deposit(accountsList[i], moneyArray[i]);
         }
     }
 
@@ -50,11 +52,10 @@ class BankTest {
     void transferMoney() {
         BigDecimal expectedTotalInBank = new BigDecimal("19488.87");
         BigDecimal expectedBalanceToBank = new BigDecimal("330.12");
-        BankAccount toBank = target.findBankAccount(20309);
         target.deposit(20309, new BigDecimal("100.00"));
 
         assertEquals(expectedTotalInBank, target.getTotalInBankWithStream());
-        assertEquals(expectedBalanceToBank, toBank.getBalance());
+        assertEquals(expectedBalanceToBank, target.getBalanceForBankAccount(20309));
     }
 
     @Test
@@ -64,13 +65,13 @@ class BankTest {
 
     @Test
     void testWithdrawal() {
+        BigDecimal expectodTotalBalance = new BigDecimal("19488.87");
         BigDecimal expectedBalanceToBank = new BigDecimal("330.12");
-        BankAccount toBank = target.findBankAccount(20309);
         target.deposit(20309, new BigDecimal("400.00"));
         target.withdrawal(20309, new BigDecimal("300.00"));
 
-        assertEquals(expectedBalanceToBank, target.getTotalInBankWithStream());
-        assertEquals(expectedBalanceToBank, toBank.getBalance());
+        assertEquals(expectodTotalBalance, target.getTotalInBankWithStream());
+        assertEquals(expectedBalanceToBank, target.getBalanceForBankAccount(20309));
 
     }
 
@@ -83,10 +84,9 @@ class BankTest {
 
     @Test
     void givenABankAccountWhenCalculatingInterestThenResultEquals() {
-        BankAccount bank = target.findBankAccount(20309);
         target.deposit(20309, new BigDecimal("400.00"));
-        BigDecimal calculatedInterest = bank.calculateInterest();
-        BigDecimal expectedInterest = new BigDecimal("21.20");
+        BigDecimal calculatedInterest = target.calculateInterestForBankAccount(20309);
+        BigDecimal expectedInterest = new BigDecimal("33.40");
 
         assertEquals(expectedInterest, calculatedInterest);
     }

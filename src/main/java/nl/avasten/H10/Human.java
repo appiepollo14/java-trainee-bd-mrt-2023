@@ -1,4 +1,6 @@
 package nl.avasten.H10;
 
-public class Human {
+public abstract class Human {
+
+    public abstract String greet();
 }

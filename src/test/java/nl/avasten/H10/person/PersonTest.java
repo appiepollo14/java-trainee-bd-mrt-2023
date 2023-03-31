@@ -1,5 +1,19 @@
-package nl.avasten.H10.person;import static org.junit.jupiter.api.Assertions.*;
+package nl.avasten.H10.person;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 class PersonTest {
-  
-public void dummy() {
-}}
+
+  private Person person;
+
+  @BeforeEach
+  public void init() {
+    this.person = new Person();
+  }
+
+  @Test
+  void greet() {}
+}
