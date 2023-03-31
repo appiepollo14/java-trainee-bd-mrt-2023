@@ -3,12 +3,16 @@ package nl.avasten.builderDemo.lombokBuilder;
 import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NonNull;
 
 @Builder
-@Data
+@Getter
 public class MyVariousFieldType {
 
-  private String name;
+  @NonNull
+  private final String name;
+
   private int age;
   private final LocalDate addDate;
   private Boolean isActive;

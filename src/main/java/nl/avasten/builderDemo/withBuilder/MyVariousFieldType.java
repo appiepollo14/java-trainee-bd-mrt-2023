@@ -107,5 +107,35 @@ public class MyVariousFieldType {
     public MyVariousFieldType build() {
       return new MyVariousFieldType(this);
     }
+
+    public MyVariousFieldBuilder setActive(Boolean active) {
+      isActive = active;
+      return this;
+    }
+
+    public MyVariousFieldBuilder setLonger(long longer) {
+      this.longer = longer;
+      return this;
+    }
+
+    public MyVariousFieldBuilder setPercentage(double percentage) {
+      this.percentage = percentage;
+      return this;
+    }
+
+    public MyVariousFieldBuilder setOptionalName(String optionalName) {
+      this.optionalName = optionalName;
+      return this;
+    }
+
+    public MyVariousFieldBuilder setOptionalName2(String optionalName2) {
+      this.optionalName2 = optionalName2;
+      return this;
+    }
+
+    public MyVariousFieldBuilder setOptionalName3(String optionalName3) {
+      this.optionalName3 = optionalName3;
+      return this;
+    }
   }
 }
