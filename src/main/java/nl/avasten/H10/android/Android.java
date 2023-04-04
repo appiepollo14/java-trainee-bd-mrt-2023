@@ -1,12 +1,12 @@
-package nl.avasten.H10.person;
+package nl.avasten.H10.android;
 
-import java.text.MessageFormat;
 import java.util.Objects;
 import nl.avasten.H10.Human;
+import nl.avasten.H10.chargable.Chargable;
 import nl.avasten.H7.person.Gender;
 import nl.avasten.H7.person.PersonDiedException;
 
-public class Person extends Human {
+public class Android extends Human implements Chargable {
 
   public static final String universalRights = "All humans are created equal.";
   static final int maxAge = 130;
@@ -14,23 +14,25 @@ public class Person extends Human {
   private String name;
   private int age;
   private Gender gender;
+  private int level;
 
-  public Person() {
+  public Android() {
     this(null, 0);
   }
 
-  public Person(String name) {
+  public Android(String name) {
     this(name, 0);
   }
 
-  public Person(String name, int age) {
+  public Android(String name, int age) {
     this(name, age, Gender.UNKNOWN);
   }
 
-  public Person(String name, int age, Gender gender) {
+  public Android(String name, int age, Gender gender) {
     this.name = name;
     this.age = age;
     this.gender = gender;
+    this.level = 0;
   }
 
   public String getName() {
@@ -54,7 +56,15 @@ public class Person extends Human {
 
   @Override
   public String greet() {
-    return MessageFormat.format("Hello my name is {0}. Nice to meet you!", this.name);
+    return "I'm only half human, but human still... My energy level is " + this.level + "%..";
+  }
+
+  @Override
+  public int charge(int amount) {
+    if (this.level + amount <= 100) {
+      this.level += amount;
+    }
+    return this.level;
   }
 
   @Override
@@ -75,7 +85,7 @@ public class Person extends Human {
     if (o == null) {
       return false;
     }
-    if (o instanceof Person p) {
+    if (o instanceof Android p) {
       return Objects.equals(p.getName(), this.getName())
           && Objects.equals(p.getAge(), this.getAge())
           && Objects.equals(p.getGender().toString(), this.getGender().toString());

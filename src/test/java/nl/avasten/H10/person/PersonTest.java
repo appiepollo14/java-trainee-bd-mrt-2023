@@ -11,9 +11,13 @@ class PersonTest {
 
   @BeforeEach
   public void init() {
-    this.person = new Person();
+    this.person = new Person("Jan");
   }
 
   @Test
-  void greet() {}
+  public void greet() {
+    String expected = "Hello my name is Jan. Nice to meet you!";
+    String actual = person.greet();
+    assertEquals(expected, actual);
+  }
 }
