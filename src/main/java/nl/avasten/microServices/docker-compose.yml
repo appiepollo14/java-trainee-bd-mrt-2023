@@ -1,0 +1,46 @@
+version: '3.7' # Versie van de docker compose syntax
+
+services: # Elke service is een docker container, met een eigen doel
+  database:
+    image: 'postgres:latest'
+    container_name: microservices-postgres-db
+    env_file: # Variabelen in file
+      postgres-test.env
+    volumes: # Lokaal data opslaan anders kwijt na herstart
+      - ./db-data/:/var/lib/postgresql/data/
+    restart: unless-stopped
+    networks:
+      - backdb
+
+  backend:
+    # Java 20 image
+    image: amazoncorretto:20
+    container_name: microservices-backend
+    # Kopieren bestanden van lokaal naar container
+    volumes:
+      - ./backend.jar:/opt/app/backend.jar
+    # Opstarten backend, met profiel
+    command: java "-Dspring.profiles.active=prod-postgres" -jar /opt/app/backend.jar
+    # Dependencies tussen containers. Helpt met de volgorde van opstarten van containers.
+    depends_on:
+      - database
+    networks:
+      - frontback
+      - backdb
+
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: microservicesrabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    env_file:
+      rabbitmq-test.env
+
+# Opstellen netwerken, zonder netwerken kunnen de containers niet met elkaar praten
+# Bridge is de standaard driver om met elkaar te praten.
+networks:
+  backdb:
+    driver: bridge
+  frontback:
+    driver: bridge

@@ -1,7 +1,6 @@
 package nl.avasten.chainStoreMicro;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.Scanner;
 
 public class CardManager {
@@ -42,6 +41,13 @@ public class CardManager {
     }
   }
 
+  public Card findCard(int id) throws IllegalArgumentException {
+    return cardList.stream()
+        .filter(f -> f.id == id)
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Card not found!"));
+  }
+
   public void runMicro() {
     printOverview();
     while (true) {
@@ -56,14 +62,20 @@ public class CardManager {
       System.out.println("Enter the amount to pay:");
       int amount = scanner.nextInt();
 
-      Optional<Card> foundCard = cardList.stream().filter(f -> f.id == cardID).findFirst();
+      Card foundCard = null;
 
-      if (foundCard.isEmpty()) {
-        System.out.println("bla");
-        break;
+      try {
+        foundCard = findCard(cardID);
+      } catch (IllegalArgumentException e) {
+        System.out.println("Card not found");
+        continue;
       }
 
-      foundCard.get().pay(amount);
+      boolean payed = foundCard.pay(amount);
+
+      if (!payed) {
+        System.out.println("Saldo ontoereikend!");
+      }
 
       printOverview();
     }

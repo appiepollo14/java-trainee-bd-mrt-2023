@@ -37,13 +37,15 @@ class CardManagerTest {
   }
 
   @Test
+  public void givenACardManagerWhenNotFindingACardThenException() {
+    assertThrows(IllegalArgumentException.class, () -> this.cardManager.findCard(1244));
+  }
+
+  @Test
   void printOverview() {
     this.cardManager.printOverview();
   }
 
   @Test
-  public void givenACardManagerWhenRunningThen() {
-
-  }
-
+  public void givenACardManagerWhenRunningThen() {}
 }
