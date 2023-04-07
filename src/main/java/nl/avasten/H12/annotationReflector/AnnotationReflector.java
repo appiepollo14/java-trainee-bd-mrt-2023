@@ -2,30 +2,38 @@ package nl.avasten.H12.annotationReflector;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class AnnotationReflector {
 
   public static void showClassAnnotations(
-      Class<?> inspectorClass, Class<? extends Annotation> annotationClass) {
-    if (inspectorClass.isAnnotationPresent(annotationClass)) {
-      System.out.println(
-          "Class: "
-              + inspectorClass.getName()
-              + " is annotated with: "
-              + annotationClass.getName());
-    }
+      Class<?> inspectorClass, List<Class<? extends Annotation>> annotationClass) {
+    for (Class<? extends Annotation> a : annotationClass) {
+      if (inspectorClass.isAnnotationPresent(a)) {
+        System.out.println(
+            "Class: " + inspectorClass.getName() + " is annotated with: " + a.getName());
 
-    for (Method m : inspectorClass.getMethods()) {
-      if (m.getAnnotations().length > 0) {
-        System.out.println("Method: " + m.getName());
-      }
+        for (Method m : inspectorClass.getMethods()) {
+          if (m.getAnnotations().length > 0) {
+            System.out.println("Method: " + m.getName() + " is annotated!");
 
-      System.out.println("Aantal annotaties: " + m.getAnnotations().length);
+            if (m.isAnnotationPresent(a)) {
+              System.out.println("Method: " + m.getName() + " is annotated with: " + a.getName());
 
-      for (Annotation a : m.getAnnotations()) {
-        if (a.annotationType().equals(annotationClass)) {
-          System.out.println(a.annotationType());
+              Annotation annotation = m.getAnnotation(a);
+              try {
+                Method valueMethod = a.getMethod("value");
+                String value = (String) valueMethod.invoke(annotation);
+                System.out.println(value);
+              } catch (Exception e) {
+                // Handle exception if necessary
+              }
+            }
+          }
         }
+      } else {
+        System.out.println(
+            "Class: " + inspectorClass.getName() + " is not annotated with: " + a.getName());
       }
     }
   }
