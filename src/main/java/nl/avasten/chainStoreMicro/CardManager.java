@@ -2,6 +2,7 @@ package nl.avasten.chainStoreMicro;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import nl.avasten.chainStoreMicro.exceptions.OutOfRangeException;
 
 public class CardManager {
 
@@ -41,8 +42,15 @@ public class CardManager {
     switch (t) {
       case REGULAR:
         this.cardList.add(new RegularCard(id, name, credit));
+        break;
       case GOLD:
-        this.cardList.add(new GoldCard(id, name, credit, discount));
+        try {
+          this.cardList.add(new GoldCard(id, name, credit, discount));
+        } catch (OutOfRangeException e) {
+          System.out.println(e.getMessage());
+        }
+
+        break;
     }
   }
 

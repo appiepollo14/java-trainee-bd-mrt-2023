@@ -21,4 +21,12 @@ public abstract class Card {
   public void setCredit(double credit) {
     this.credit = credit;
   }
+
+  public int getId() {
+    return this.id;
+  }
+
+  public String getName() {
+    return this.name;
+  }
 }

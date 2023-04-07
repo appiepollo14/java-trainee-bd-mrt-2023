@@ -9,19 +9,14 @@ public class GoldCard extends Card {
 
   private int discount;
 
-  public GoldCard(int id, String name, int discount) {
+  public GoldCard(int id, String name, int discount) throws OutOfRangeException {
     this(id, name, 0.00, discount);
   }
 
-  public GoldCard(int id, String name, double credit, int discount) {
+  public GoldCard(int id, String name, double credit, int discount) throws OutOfRangeException{
     super(id, name, credit);
-    // TODO solve beneath
-    try {
-      this.setDiscount(discount);
-    } catch (OutOfRangeException e) {
-      System.out.println(e.getMessage());
-      return;
-    }
+
+    this.setDiscount(discount);
   }
 
   @Override
