@@ -9,14 +9,24 @@ import java.util.Random;
 
 public class Bank {
 
-  public ArrayList<BankAccount> bankAccountsList = new ArrayList<>();
-
-  public void createBankAccount() {
-    this.bankAccountsList.add(new BankAccount());
+  enum AccountType {
+    CHECKINGSACCOUNT,
+    SAVINGSACCOUNT
   }
 
-  public void createBankAccount(int accountNumber) {
-    this.bankAccountsList.add(new BankAccount(accountNumber));
+  public ArrayList<BankAccount> bankAccountsList = new ArrayList<>();
+
+  public void createBankAccount(AccountType accountType, BigDecimal balance, int id) {
+
+    // TODO hoe helpt de factory method hier als er sprake is van
+    // variabele hoeveelheid fields
+    switch (accountType) {
+      case CHECKINGSACCOUNT:
+        this.bankAccountsList.add(new CheckingsAccount(balance, id));
+      case SAVINGSACCOUNT:
+        float interestRate = 5f;
+        this.bankAccountsList.add(new SavingsAccount(balance, id, interestRate));
+    }
   }
 
   public void listBankAccounts() {
@@ -39,7 +49,11 @@ public class Bank {
 
   public BigDecimal calculateInterestForBankAccount(int accountNum) {
     BankAccount account = findBankAccount(accountNum);
-    return account.calculateInterest();
+    if (account instanceof SavingsAccount s) {
+      return s.calculateInterest();
+    } else {
+      return null;
+    }
   }
 
   public void transferMoney(int fromAccount, int toAccount, BigDecimal amount) {
@@ -104,28 +118,54 @@ public class Bank {
         .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
-  private static class BankAccount {
+  private static class CheckingsAccount extends BankAccount {
+    public CheckingsAccount(BigDecimal balance, int accountNumber) {
+      super(balance, accountNumber);
+    }
+  }
+
+  private static class SavingsAccount extends BankAccount {
+    private float interestRate;
+
+    public SavingsAccount(BigDecimal balance, int accountNumber, float interestRate) {
+      super(balance, accountNumber);
+      this.interestRate = interestRate;
+    }
+
+    public BigDecimal calculateInterest() {
+
+      BigDecimal interest = new BigDecimal("0.00");
+
+      interest =
+          super.balance
+              .multiply(BigDecimal.valueOf(this.interestRate))
+              .divide(new BigDecimal("100"))
+              .setScale(2, BigDecimal.ROUND_HALF_UP);
+
+      return interest;
+    }
+  }
+
+  private static abstract class BankAccount {
 
     private final int accountNumber;
     private BigDecimal balance;
-    private float interestRate;
 
     public BankAccount() {
       this(new BigDecimal("0.00"));
     }
 
     public BankAccount(int accountNumber) {
-      this(5.3f, new BigDecimal("0.00"), accountNumber);
+      this(new BigDecimal("0.00"), accountNumber);
     }
 
     public BankAccount(BigDecimal balance) {
-      this(5.3f, balance, new Random().nextInt(0, 99999));
+      this(balance, new Random().nextInt(0, 99999));
     }
 
-    public BankAccount(float interestRate, BigDecimal balance, int accountNumber) {
+    public BankAccount(BigDecimal balance, int accountNumber) {
       this.balance = balance;
       this.accountNumber = accountNumber;
-      this.interestRate = interestRate;
     }
 
     public int getAccountNumber() {
@@ -153,19 +193,6 @@ public class Bank {
       }
     }
 
-    public BigDecimal calculateInterest() {
-
-      BigDecimal interest = new BigDecimal("0.00");
-
-      interest =
-          this.balance
-              .multiply(BigDecimal.valueOf(this.interestRate))
-              .divide(new BigDecimal("100"))
-              .setScale(2, BigDecimal.ROUND_HALF_UP);
-
-      return interest;
-    }
-
     @Override
     public String toString() {
 
@@ -177,10 +204,6 @@ public class Bank {
           + accountNumber
           + ", balance = "
           + currencyFormat.format(balance)
-          + ", interestRate = "
-          + interestRate
-          + ", yearlyInterest = "
-          + currencyFormat.format(calculateInterest())
           + '}';
     }
   }
