@@ -5,6 +5,11 @@ import java.util.Scanner;
 
 public class CardManager {
 
+  private enum CardType {
+    REGULAR,
+    GOLD
+  };
+
   public ArrayList<Card> getCardList() {
     return cardList;
   }
@@ -16,16 +21,28 @@ public class CardManager {
   }
 
   public void addCard(int id, String name, int discount) {
-    addCard(id, name, 0, discount);
+    if (discount > 0) {
+      addCard(CardType.GOLD, id, name, 0, discount);
+    } else {
+      addCard(CardType.REGULAR, id, name, 0, discount);
+    }
   }
 
   public void addCard(int id, String name, int credit, int discount) {
     if (discount > 0) {
-      GoldCard newCard = new GoldCard(id, name, credit, discount);
-      this.cardList.add(newCard);
+      addCard(CardType.GOLD, id, name, credit, discount);
     } else {
-      RegularCard newCard = new RegularCard(id, name, credit);
-      this.cardList.add(newCard);
+      addCard(CardType.REGULAR, id, name, credit, discount);
+    }
+  }
+
+  // TODO implement factory method
+  public void addCard(CardType t, int id, String name, int credit, int discount) {
+    switch (t) {
+      case REGULAR:
+        this.cardList.add(new RegularCard(id, name, credit));
+      case GOLD:
+        this.cardList.add(new GoldCard(id, name, credit, discount));
     }
   }
 
