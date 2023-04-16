@@ -36,7 +36,7 @@ services: # Elke service is een docker container, met een eigen doel
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./frontend:/usr/share/nginx/html
-    restart: always
+    restart: unless-stopped
     depends_on:
       - backend
     networks:
