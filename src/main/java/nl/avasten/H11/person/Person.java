@@ -1,4 +1,4 @@
-package nl.avasten.H10.person;
+package nl.avasten.H11.person;
 
 import java.text.MessageFormat;
 import java.util.Objects;
@@ -14,6 +14,8 @@ public class Person extends Human {
   private String name;
   private int age;
   private Gender gender;
+  private HistoryRecord[] historyRecords = new HistoryRecord[10];
+  private int historyCounter;
 
   public Person() {
     this(null, 0);
@@ -50,6 +52,28 @@ public class Person extends Human {
       throw new PersonDiedException("Persoon is overleden");
     }
     this.age += 1;
+  }
+
+  public void addHistory(String description) {
+    historyRecords[historyCounter] = new HistoryRecord(description);
+    historyCounter += 1;
+  }
+
+  public void printHistory() {
+
+    for (int i = 0; i < this.historyCounter; i++) {
+      System.out.println(this.historyRecords[i].toString());
+    }
+  }
+
+  public Human createSubHuman() {
+    return new Human() {
+
+      @Override
+      public String greet() {
+        return "Sub is the best.";
+      }
+    };
   }
 
   @Override
@@ -100,5 +124,19 @@ public class Person extends Human {
     System.out.println("Tweede finalize");
 
     super.finalize();
+  }
+
+  private static class HistoryRecord {
+
+    private String description;
+
+    public HistoryRecord(String description) {
+      this.description = description;
+    }
+
+    @Override
+    public String toString() {
+      return "HistoryRecord{" + "description='" + description + '\'' + '}';
+    }
   }
 }

@@ -1,11 +1,14 @@
-package nl.avasten.H10.person;
+package nl.avasten.H12.person;
 
 import java.text.MessageFormat;
 import java.util.Objects;
 import nl.avasten.H10.Human;
+import nl.avasten.H12.annotations.MyAnnotation;
+import nl.avasten.H12.annotations.MyAnnotation2;
 import nl.avasten.H7.person.Gender;
 import nl.avasten.H7.person.PersonDiedException;
 
+@MyAnnotation
 public class Person extends Human {
 
   public static final String universalRights = "All humans are created equal.";
@@ -33,6 +36,8 @@ public class Person extends Human {
     this.gender = gender;
   }
 
+  @MyAnnotation
+  @MyAnnotation2
   public String getName() {
     return name;
   }

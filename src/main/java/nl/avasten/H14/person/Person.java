@@ -1,12 +1,13 @@
-package nl.avasten.H10.person;
+package nl.avasten.H14.person;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Objects;
 import nl.avasten.H10.Human;
 import nl.avasten.H7.person.Gender;
 import nl.avasten.H7.person.PersonDiedException;
 
-public class Person extends Human {
+public class Person extends Human implements Comparable<Person> {
 
   public static final String universalRights = "All humans are created equal.";
   static final int maxAge = 130;
@@ -14,6 +15,8 @@ public class Person extends Human {
   private String name;
   private int age;
   private Gender gender;
+  private ArrayList<HistoryRecord> historyRecords = new ArrayList<>();
+  private int historyCounter;
 
   public Person() {
     this(null, 0);
@@ -52,6 +55,28 @@ public class Person extends Human {
     this.age += 1;
   }
 
+  public void addHistory(String description) {
+    historyRecords.add(new HistoryRecord(description));
+    historyCounter = historyRecords.size();
+  }
+
+  public void printHistory() {
+
+    for (int i = 0; i < this.historyCounter; i++) {
+      System.out.println(this.historyRecords.get(i).toString());
+    }
+  }
+
+  public Human createSubHuman() {
+    return new Human() {
+
+      @Override
+      public String greet() {
+        return "Sub is the best.";
+      }
+    };
+  }
+
   @Override
   public String greet() {
     return MessageFormat.format("Hello my name is {0}. Nice to meet you!", this.name);
@@ -64,7 +89,7 @@ public class Person extends Human {
 
   @Override
   public int hashCode() {
-    return name.hashCode() * gender.toString().hashCode();
+    return name.hashCode() * gender.toString().hashCode() * (int) (Math.random() * 100);
   }
 
   @Override
@@ -100,5 +125,34 @@ public class Person extends Human {
     System.out.println("Tweede finalize");
 
     super.finalize();
+  }
+
+  @Override
+  public int compareTo(Person o) {
+    if (getAge() == o.getAge()) {
+      if (getName().length() < o.getName().length()){
+        return -1;
+      } else {
+        return 1;
+      }
+    } else if (getAge() < o.getAge()) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
+
+  private static class HistoryRecord {
+
+    private String description;
+
+    public HistoryRecord(String description) {
+      this.description = description;
+    }
+
+    @Override
+    public String toString() {
+      return "HistoryRecord{" + "description='" + description + '\'' + '}';
+    }
   }
 }

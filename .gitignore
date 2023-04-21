@@ -1,4 +1,5 @@
 **/*.iml
 **/target/
 **/.idea/
-/dockerComposeDemo/db-data/
+**/db-data/
+/src/main/java/nl/avasten/microServices/backend.jar
