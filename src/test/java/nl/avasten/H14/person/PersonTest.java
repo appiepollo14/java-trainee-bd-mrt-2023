@@ -77,4 +77,24 @@ class PersonTest {
       System.out.println(entry.getKey() + " ==== " + entry.getValue());
     }
   }
+
+  @Test
+  public void givenAPersonWithAListOfHistoryRecordsWhenIteratingThenCountIterations() {
+
+    Person annejet = new Person("Annejet", 30, Gender.FEMALE);
+
+    annejet.addHistory("Henk");
+    annejet.addHistory("Kaas");
+
+    int actualHistRecord = 0;
+
+    for (Person.HistoryRecord h: annejet) {
+        System.out.println(h);
+        actualHistRecord += 1;
+    }
+
+    Assertions.assertEquals(2, actualHistRecord);
+
+
+  }
 }

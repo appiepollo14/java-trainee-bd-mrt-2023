@@ -17,7 +17,6 @@ public class MyIntCollection {
       this.intArr = Arrays.copyOf(this.intArr, this.intArr.length * 2);
     }
     this.intArr[pointer] = toBeAddedNumber;
-    ;
     pointer += 1;
   }
 

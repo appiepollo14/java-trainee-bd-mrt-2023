@@ -5,24 +5,31 @@ import java.util.Arrays;
 public class MyGenericCollection<T> {
 
   private T[] arr;
-  private int pointer;
+  private int length;
 
   public MyGenericCollection() {
-    // TODO vragen naar deze syntax uitleg
     this.arr = (T[]) new Object[4];
-    this.pointer = 0;
+    this.length = 0;
   }
 
   public void add(T toBeAddedObject) {
-    if (pointer == this.arr.length) {
+    if (length == this.arr.length) {
       this.arr = Arrays.copyOf(this.arr, this.arr.length * 2);
     }
-    this.arr[pointer] = toBeAddedObject;
+    this.arr[length] = toBeAddedObject;
     ;
-    pointer += 1;
+    length += 1;
   }
 
-  public T[] getArr() {
+  public T getArr(int i) {
+    return this.arr[i];
+  }
+
+  public T[] getTotalArray() {
     return this.arr;
+  }
+
+  public int getLength() {
+    return length;
   }
 }

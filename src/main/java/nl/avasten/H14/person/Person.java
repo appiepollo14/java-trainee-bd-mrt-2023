@@ -1,13 +1,12 @@
 package nl.avasten.H14.person;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 import nl.avasten.H10.Human;
 import nl.avasten.H7.person.Gender;
 import nl.avasten.H7.person.PersonDiedException;
 
-public class Person extends Human implements Comparable<Person> {
+public class Person extends Human implements Comparable<Person>, Iterable<Person.HistoryRecord> {
 
   public static final String universalRights = "All humans are created equal.";
   static final int maxAge = 130;
@@ -15,7 +14,7 @@ public class Person extends Human implements Comparable<Person> {
   private String name;
   private int age;
   private Gender gender;
-  private ArrayList<HistoryRecord> historyRecords = new ArrayList<>();
+  private List<HistoryRecord> historyRecords = new ArrayList<>();
   private int historyCounter;
 
   public Person() {
@@ -130,7 +129,7 @@ public class Person extends Human implements Comparable<Person> {
   @Override
   public int compareTo(Person o) {
     if (getAge() == o.getAge()) {
-      if (getName().length() < o.getName().length()){
+      if (getName().length() < o.getName().length()) {
         return -1;
       } else {
         return 1;
@@ -142,7 +141,28 @@ public class Person extends Human implements Comparable<Person> {
     }
   }
 
-  private static class HistoryRecord {
+  @Override
+  public Iterator<HistoryRecord> iterator() {
+    return new Iterator<HistoryRecord>() {
+
+      private int i;
+
+      @Override
+      public boolean hasNext() {
+        return i < Person.this.historyRecords.size();
+      }
+
+      @Override
+      public HistoryRecord next() {
+        if (!hasNext()) {
+          throw new NoSuchElementException();
+        }
+        return Person.this.historyRecords.get(i++);
+      }
+    };
+  }
+
+  public static class HistoryRecord {
 
     private String description;
 
