@@ -29,7 +29,7 @@ services: # Elke service is een docker container, met een eigen doel
       - backdb
 
   rabbitmq:
-    image: rabbitmq:3.9.11-management-alpine
+    image: rabbitmq:3.12.4-management-alpine
     container_name: microservicesrabbitmq
     ports:
       - "5672:5672"
